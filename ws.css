@@ -1,0 +1,37 @@
+body {
+    background: #222;
+}
+a, a:hover, a:visited, a:active {
+    color: #fff;
+}
+.log {
+    background: white;
+    margin: 0;
+    padding: 5px;
+    position:absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 40px;
+    overflow: auto;
+}
+.form {
+    padding: 5px;
+    margin: 0;
+    position:absolute;
+    bottom: 5px;
+    left: 0px;
+    right: 5px;
+    height: 25px;
+    overflow: hidden;
+}
+.sockwindow {
+    float: left;
+    position: fixed;
+    background: #eee;
+    width: 400px;
+    height: 400px;
+}
+.command {
+    width: 100%;
+}
