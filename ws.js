@@ -1,7 +1,6 @@
 function createWindow(){
     var aantal = ws.windows.length;
     var newwindow = aantal;
-    console.log(newwindow);
     var newwindowhtml = ws.windowhtml.replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow);
     var newdiv = $(newwindowhtml);
     $("body").append(newdiv);
@@ -9,26 +8,14 @@ function createWindow(){
     $("#websock" + newwindow).resizable();
     $("#websock" + newwindow).draggable({ stack: ".sockwindow"});
     $("#websock" + newwindow).attr("nummer", newwindow);
-}
-
-    var conn;
-    var msg = $("#msg");
-    var log = $("#log");
-    msg.focus();
-
-    function appendLog(div,msg) {
-        var d = log[0]
-        var doScroll = d.scrollTop == d.scrollHeight - d.clientHeight;
-        msg.appendTo(div)
-        if (doScroll) {
-            d.scrollTop = d.scrollHeight - d.clientHeight;
-        }
-    }
-
-    $("#form").submit(function() {
+    $("#form" + newwindow).submit(function(event) {
+        event.preventDefault();
         var nummer = $(this).parent().attr("nummer")
+        var msg = $("#msg" + nummer);
         if (!ws.conns[nummer]) {
-            connect(msg.val());
+            console.log('connectiong');
+            connect(nummer, msg.val());
+            msg.val("");
             return false;
         }
         if (!msg.val()) {
@@ -38,22 +25,38 @@ function createWindow(){
         msg.val("");
         return false
     });
+}
 
-    function connect(url) {
+
+    function appendLog(nummer,msg) {
+        var log = $("#log" + nummer);
+        console.log(log);
+        var d = log[0];
+        var div = $("#msg" + nummer);
+        var doScroll = d.scrollTop == d.scrollHeight - d.clientHeight;
+        msg.appendTo(log)
+        if (doScroll) {
+            d.scrollTop = d.scrollHeight - d.clientHeight;
+        }
+    }
+
+    function connect(nummer, url) {
         if (window["WebSocket"]) {
-            conn = new WebSocket("ws://" + url);
-            conn.onopen = function(evt) {
-                appendLog($("<div><strong>Connection opened..</strong></div>"));
+            ws.conns[nummer]  = new WebSocket("ws://" + url);
+            ws.conns[nummer].onopen = function(evt) {
+                console.log(nummer);
+                appendLog(nummer, $("<div><strong>Connection opened..</strong></div>"));
             };
-            conn.onclose = function(evt) {
-                appendLog($("<div><b>Connection closed.</b></div>"));
-                conn = false;
+            ws.conns[nummer].onclose = function(evt) {
+                appendLog(nummer, $("<div><b>Connection closed.</b></div>"));
+                ws.conns[nummer] = false;
             };
-            conn.onmessage = function(evt) {
-                appendLog($("<div/>").text(evt.data))
+            ws.conns[nummer].onmessage = function(evt) {
+                console.log(nummer);
+                appendLog(nummer, $("<div/>").text(evt.data))
             };
         } else {
-            appendLog($("<div><b>Your browser does not support WebSockets.</b></div>"));
+            appendLog(nummer, $("<div><b>Your browser does not support WebSockets.</b></div>"));
         }
     }
 $(function() {
@@ -64,7 +67,6 @@ $(function() {
 
     $("#newwindow").click(function() {
         createWindow();
-        console.log("creating new");
         return false;
     });
 });
