@@ -22,6 +22,7 @@ function createWindow(){
             return false;
         }
         ws.conns[nummer].send(msg.val());
+        appendLog(nummer,$("<div>->" + msg.val() + "</div>"));
         msg.val("");
         return false
     });
@@ -42,11 +43,15 @@ function createWindow(){
 
     function connect(nummer, url) {
         if (window["WebSocket"]) {
+            appendLog(nummer, $("<div>attempt at connecting</div>"));
             ws.conns[nummer]  = new WebSocket("ws://" + url);
             ws.conns[nummer].onopen = function(evt) {
                 console.log(nummer);
                 appendLog(nummer, $("<div><strong>Connection opened..</strong></div>"));
             };
+            ws.conns[nummer].onerror = function(evt) {
+                console.log(evt);
+            }
             ws.conns[nummer].onclose = function(evt) {
                 appendLog(nummer, $("<div><b>Connection closed.</b></div>"));
                 ws.conns[nummer] = false;
