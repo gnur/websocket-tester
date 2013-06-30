@@ -25,6 +25,9 @@ a, a:hover, a:visited, a:active {
     height: 25px;
     overflow: hidden;
 }
+.form  a, .from a:hover, .form a:visited, .form a:active {
+    color: #000;
+}
 .sockwindow {
     float: left;
     position: fixed;
@@ -33,5 +36,5 @@ a, a:hover, a:visited, a:active {
     height: 400px;
 }
 .command {
-    width: 100%;
+    width: 90%;
 }
