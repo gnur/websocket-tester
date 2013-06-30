@@ -1,7 +1,7 @@
 function createWindow(){
     var aantal = ws.windows.length;
     var newwindow = aantal;
-    var newwindowhtml = ws.windowhtml.replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow);
+    var newwindowhtml = ws.windowhtml.replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow).replace("##NUMBER##", newwindow);
     var newdiv = $(newwindowhtml);
     $("body").append(newdiv);
     ws.windows.push($("#websock" + newwindow));
@@ -13,6 +13,7 @@ function createWindow(){
         var nummer = $(this).attr("nummer");
         if (ws.conns[nummer]) {
             ws.conns[nummer].close();
+            $("#sub" + nummer).val("connect");
         } else {
             $("#websock" + nummer).remove();
         }
@@ -55,6 +56,7 @@ function createWindow(){
             ws.conns[nummer]  = new WebSocket("ws://" + url);
             ws.conns[nummer].onopen = function(evt) {
                 appendLog(nummer, $("<div><strong>Connection opened..</strong></div>"));
+                $("#sub" + nummer).val("send");
             };
             ws.conns[nummer].onerror = function(evt) {
                 console.log(evt);
@@ -75,7 +77,7 @@ $(function() {
     ws = {};
     ws.conns = [];
     ws.windows = [];
-    ws.windowhtml = "<div id=websock##NUMBER## class=sockwindow><div class=log id=log##NUMBER##></div><form class=form id=form##NUMBER##><table cellpadding=0 cellspacing=0 width=100%><tr><td style='width:20px;'><input type=submit /></td><td><input type=text class=command id=msg##NUMBER## /> <a href='javascript:void(null);' id=close##NUMBER##>[X]</a></td></tr></table></form></div>";
+    ws.windowhtml = "<div id=websock##NUMBER## class=sockwindow><div class=log id=log##NUMBER##></div><form class=form id=form##NUMBER##><table cellpadding=0 cellspacing=0 width=100%><tr><td style='width:20px;'><input type=submit value=connect id=sub##NUMBER## /></td><td><input type=text class=command id=msg##NUMBER## /> <a href='javascript:void(null);' id=close##NUMBER##>[X]</a></td></tr></table></form></div>";
 
     $("#newwindow").click(function() {
         createWindow();
