@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+<title>Websocket tester</title>
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/cupertino/jquery-ui.css" />
+<script type='text/javascript' src='http://code.jquery.com/jquery-1.5.js'></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.js"></script>
+<link rel="STYLESHEET" type="text/css" href="ws.css" />
+
+</head>
+<body>
+<textarea id=master></textarea><br> 
+<textarea id=slave></textarea><br> 
+
+<script>
+$(function(){
+    var url = "egdk.nl:11011/2KXZ5GPNGIQAK3G2";
+    if (window["WebSocket"]) {
+        var ws  = new WebSocket("ws://" + url);
+        var slaveinput = $("#slave");
+        ws.onclose = function(evt) {
+            alert('connection closed');
+            ws = false;
+        };
+        ws.onmessage = function(evt) {
+            slaveinput.val(evt.data);
+        };
+    }
+    $("#master").keyup(function() {
+        ws.send($("#master").val());
+    });
+});
+</script>
+</body>
+</html>
