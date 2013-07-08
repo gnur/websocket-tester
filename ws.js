@@ -55,14 +55,17 @@ function createWindow(){
             appendLog(nummer, $("<div>connecting to ws://" + url + "</div>"));
             ws.conns[nummer]  = new WebSocket("ws://" + url);
             ws.conns[nummer].onopen = function(evt) {
-                appendLog(nummer, $("<div><strong>Connection opened..</strong></div>"));
+                var time = new Date().getTime();
+                appendLog(nummer, $("<div>" + time + ":<strong>Connection opened..</strong></div>"));
                 $("#sub" + nummer).val("send");
             };
             ws.conns[nummer].onerror = function(evt) {
                 console.log(evt);
             }
             ws.conns[nummer].onclose = function(evt) {
-                appendLog(nummer, $("<div><b>Connection closed.</b></div>"));
+                var time = new Date().getTime();
+                appendLog(nummer, $("<div>" + time + ":<b>Connection closed.</b></div>"));
+                $("#sub" + nummer).val("connect");
                 ws.conns[nummer] = false;
             };
             ws.conns[nummer].onmessage = function(evt) {
