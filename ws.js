@@ -20,7 +20,7 @@ function createWindow(){
     });
     $("#form" + newwindow).submit(function(event) {
         event.preventDefault();
-        var nummer = $(this).parent().attr("nummer")
+        var nummer = $(this).parent().attr("nummer");
         var msg = $("#msg" + nummer);
         if (!ws.conns[nummer]) {
             connect(nummer, msg.val());
@@ -34,7 +34,7 @@ function createWindow(){
         var time = new Date().getTime();
         appendLog(nummer,$("<div>" + time + "> " + msg.val() + "</div>"));
         msg.val("");
-        return false
+        return false;
     });
 }
 
@@ -44,7 +44,7 @@ function createWindow(){
         var d = log[0];
         var div = $("#msg" + nummer);
         var doScroll = d.scrollTop == d.scrollHeight - d.clientHeight;
-        msg.appendTo(log)
+        msg.appendTo(log);
         if (doScroll) {
             d.scrollTop = d.scrollHeight - d.clientHeight;
         }
@@ -52,16 +52,17 @@ function createWindow(){
 
     function connect(nummer, url) {
         if (window["WebSocket"]) {
-            appendLog(nummer, $("<div>connecting to ws://" + url + "</div>"));
-            ws.conns[nummer]  = new WebSocket("ws://" + url);
+            appendLog(nummer, $("<div>connecting to " + url + "</div>"));
+            ws.conns[nummer]  = new WebSocket(url);
             ws.conns[nummer].onopen = function(evt) {
                 var time = new Date().getTime();
                 appendLog(nummer, $("<div>" + time + ":<strong>Connection opened..</strong></div>"));
                 $("#sub" + nummer).val("send");
             };
             ws.conns[nummer].onerror = function(evt) {
+                console.log("error");
                 console.log(evt);
-            }
+            };
             ws.conns[nummer].onclose = function(evt) {
                 var time = new Date().getTime();
                 appendLog(nummer, $("<div>" + time + ":<b>Connection closed.</b></div>"));
@@ -70,7 +71,7 @@ function createWindow(){
             };
             ws.conns[nummer].onmessage = function(evt) {
                 var time = new Date().getTime();
-                appendLog(nummer, $("<div/>").text(time + "< " + evt.data))
+                appendLog(nummer, $("<div/>").text(time + "< " + evt.data));
             };
         } else {
             appendLog(nummer, $("<div><b>Your browser does not support WebSockets.</b></div>"));
